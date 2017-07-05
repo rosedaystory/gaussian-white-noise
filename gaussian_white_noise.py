@@ -1,7 +1,7 @@
 
 # coding: utf-8
 
-# In[306]:
+# In[18]:
 
 from sklearn.datasets import make_regression
 import numpy as np
@@ -17,7 +17,7 @@ import matplotlib as mpl
 from ipykernel import kernelapp as app
 
 
-# In[317]:
+# In[35]:
 
 # make white noise, n_data = number of data, n_length = length of each data
 
@@ -67,6 +67,15 @@ class White(object):
             print("error!!")
         return self.white.std(axis=k)
 
+    def std2(self):
+        a = np.random.randn(len(self.df_white[0]),len(self.df_white[0]))
+        b = self.std()
+        for i in range(len(self.df_white[0])):
+            for j in range(len(self.df_white[0])):
+                a[i][j] = b[i]*b[j]
+        return a       
+        
+    
     def mean(self,ensemble=True):
         """
         calculate mean
@@ -96,9 +105,7 @@ class White(object):
             for j in range(len(self.white[0])):
                    a[i][j]=self.cov(i,j)
         return a
-        
-        
-    
+   
     def lo(self, k, s):
         """
         calculate cov of kth and sth of timeseriese
@@ -109,10 +116,7 @@ class White(object):
         """
         calculate all lo and return it as n by n list
         """
-        a = np.random.rand(len(self.white[0]),len(self.white[0]))
-        for i in range(len(self.white[0])):
-            for j in range(len(self.white[0])):
-                   a[i][j]=self.lo(i,j)
+        a = self.cov_all()/self.std2()
         return a
 
 
